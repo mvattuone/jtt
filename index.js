@@ -3,29 +3,49 @@ function init() {
   const NOTES = [
     {
       frequency: 82.4069,
-      name: 'e2'
+      name: 'e2',
+      image: 'jtt-e2.jpg'
     },
     {
       frequency: 110, 
-      name: 'a2'
+      name: 'a2',
+      image: 'jtt-e2.jpg'
     },
     {
       frequency: 146.832,
-      name: 'd3'
+      name: 'd3',
+      image: 'jtt-e2.jpg'
     },
     {
       frequency: 195.998,
-      name: 'g3'
+      name: 'g3',
+      image: 'jtt-e2.jpg'
     },
     {
       frequency: 246.942,
-      name: 'b3'
+      name: 'b3',
+      image: 'jtt-e2.jpg'
     },
     {
       frequency: 329.628,
-      name: 'e4'
+      name: 'e4',
+      image: 'jtt-e2.jpg'
     }
   ]
+
+  var canvas = document.createElement('canvas');
+  var context = canvas.getContext('2d');
+  canvas.width = 1280;
+  canvas.height = 768;
+
+  NOTES.forEach(function (note) { 
+    var img = new Image();
+    img.addEventListener('load', () => {
+      context.drawImage(img, 0, 0);
+      note.imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    });
+    img.src = note.image;
+  })
 
   function getNoteDeviationInCents(frequency, targetFrequency) { 
     frequencyInterval = frequency/targetFrequency;
@@ -97,6 +117,10 @@ function init() {
     var howOff = getNoteDeviationInCents(frequency, closestNote.frequency);
 
     console.log('and you are about ' + howOff + ' cents off');
+
+    databender.bend(closestNote.imageData, howOff).then(function(renderedBuffer) {
+      databender.draw(renderedBuffer);
+    });
   }
 
   var audioCtx = new AudioContext();
@@ -104,11 +128,11 @@ function init() {
   var analyserNode = audioCtx.createAnalyser();
   analyserNode.fftSize = 4096;
   var waveform = new Float32Array(analyserNode.fftSize);
-
+  var databender = new Databender(audioCtx);
   // Sometimes its not possible to play a guitar or use the microphone
   // while developing. This bypasses that limitation.
   if (CANT_BE_LOUD) {
-    fetch('3rd_String_G_64kb.mp3').then(function (response) {
+    fetch('6th_String_E_64kb.mp3').then(function (response) {
       return response.arrayBuffer();
     }).then(function (buffer) {
       audioCtx.decodeAudioData(buffer, (decodedBuffer) => {
@@ -135,5 +159,5 @@ function init() {
   }
 }
 
-CANT_BE_LOUD = false;
+CANT_BE_LOUD = true;
 init();
