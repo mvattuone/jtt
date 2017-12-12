@@ -9,38 +9,39 @@ function init() {
     {
       frequency: 110, 
       name: 'a2',
-      image: 'jtt-e2.jpg'
+      image: 'jtt-a2.jpg'
     },
     {
       frequency: 146.832,
       name: 'd3',
-      image: 'jtt-e2.jpg'
+      image: 'jtt-d3.jpg'
     },
     {
       frequency: 195.998,
       name: 'g3',
-      image: 'jtt-e2.jpg'
+      image: 'jtt-g3.jpg'
     },
     {
       frequency: 246.942,
       name: 'b3',
-      image: 'jtt-e2.jpg'
+      image: 'jtt-b3.jpg'
     },
     {
       frequency: 329.628,
       name: 'e4',
-      image: 'jtt-e2.jpg'
+      image: 'jtt-e4.jpg'
     }
   ]
 
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  canvas.width = 1280;
-  canvas.height = 768;
+  canvas.width = 700;
+  canvas.height = 700;
 
   NOTES.forEach(function (note) { 
     var img = new Image();
     img.addEventListener('load', () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0);
       note.imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     });
