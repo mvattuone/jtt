@@ -68,7 +68,7 @@ function init() {
       return false;
     }
 
-    for (lag = -waveform.length; lag < waveform.length; lag++ ) {
+    for (lag = -waveform.length; lag <= 0; lag++ ) {
       var xcorr = 0;
 
       for (i = 0; i < waveform.length; i++) {
@@ -81,7 +81,7 @@ function init() {
       });
     }
 
-    var main_peak = correlogram[waveform.length];
+    var main_peak = correlogram[correlogram.length - 1];
     var peaks = [];
     for (i = 0; i < waveform.length; i++) {
       if (correlogram[i+1] && correlogram[i].value > correlogram[i+1].value && correlogram[i-1] && correlogram[i].value > correlogram[i-1].value) {
@@ -126,13 +126,14 @@ function init() {
   var audioCtx = new AudioContext();
   source = audioCtx.createBufferSource();
   var analyserNode = audioCtx.createAnalyser();
-  analyserNode.fftSize = 4096;
+  analyserNode.fftSize = 2048;
   var waveform = new Float32Array(analyserNode.fftSize);
   var databender = new Databender(audioCtx);
+
   // Sometimes its not possible to play a guitar or use the microphone
   // while developing. This bypasses that limitation.
   if (CANT_BE_LOUD) {
-    fetch('6th_String_E_64kb.mp3').then(function (response) {
+    fetch('3rd_String_G_64kb.mp3').then(function (response) {
       return response.arrayBuffer();
     }).then(function (buffer) {
       audioCtx.decodeAudioData(buffer, (decodedBuffer) => {
