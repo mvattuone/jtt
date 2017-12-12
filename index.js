@@ -118,6 +118,17 @@ function init() {
 
     console.log('and you are about ' + howOff + ' cents off');
 
+    if (Math.abs(howOff) < 5) {
+     howOff = 0;
+     document.querySelector('.' + closestNote.name).classList.remove('hidden');
+    } else {
+     howOff /= 10;
+     document.querySelectorAll('.text').forEach(function (node) {
+       node.classList.add('hidden');
+     });
+    };
+
+
     databender.bend(closestNote.imageData, howOff).then(function(renderedBuffer) {
       databender.draw(renderedBuffer);
     });
