@@ -47,13 +47,12 @@
           offlineAudioCtx.startRendering();
           // Render the databent image.
           offlineAudioCtx.oncomplete = function (e) {
-            console.log(e.renderedBuffer.getChannelData(0));
             resolve(e.renderedBuffer);
           };
         });
       };
 
-      this.draw = function (buffer) {
+      this.draw = function (buffer, canvas) {
 
         // Get buffer data
         var bufferData = buffer.getChannelData(0);
@@ -69,16 +68,7 @@
         // @see https://developer.mozilla.org/en-US/docs/Web/API/ImageData
         var transformedImage = new ImageData(clampedDataArray, this.imageData.width, this.imageData.height);
 
-        if (!document.querySelector('canvas')) {
-          var canvas = document.createElement('canvas');
-          canvas.id = "canvas"
-          canvas.width = this.imageData.width;
-          canvas.height = this.imageData.height;
-          document.body.prepend(canvas);
-        }
-
-        foo = transformedImage;
-        document.querySelector('#canvas').getContext('2d').putImageData(transformedImage, 0, 0);
+       canvas.getContext('2d').putImageData(transformedImage, 0, 0, 0, 0, canvas.width, canvas.height);
       };
 
 

@@ -1,30 +1,81 @@
 <!DOCTYPE html>
 <html>
   <style>
-    .text {
-      font-family: 'Helvetica';
-      font-size: 70px;
-      float:right;
-      width: 500px;
-      display: inline-block;
+    @font-face {
+      font-family: "Comic Neue";
+      src: url("/ComicNeue-Regular.woff2") format("woff2");
+    }
+    body { 
+      background: #5E90FC;
     }
 
-    .text.hidden {
+    #canvas {
+      grid-area: canvas;
+    }
+
+    .textbox { 
+      padding: 0;
+    }
+
+    .text {
+      font-family: "Comic Neue";
+      font-size: 48px;
+      margin: 0;
+    }
+
+    .textbox {
+      grid-area: textbox;
+    }
+
+    .textbox .hidden {
       display: none;
     }
+
+    .tunedown, .tuneup {
+      font-size:108px;
+      text-align: center;
+    }
+
+    .tunedown {
+      grid-area: tunedown;
+    }
+
+    .tuneup { 
+      grid-area: tuneup;
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      grid-template-rows: 80% 20%;
+      grid-template-areas: 
+        "tunedown canvas canvas tuneup"
+        "textbox textbox textbox textbox";
+    }
+
   </style>
   <head>
     <meta charset="utf-8">
     <title>Jonathan Taylor Tuner</title>
   </head>
   <body>
-    <canvas width="700" height="700" id="canvas"></canvas>
-    <p class="e2 text hidden">You did it. Jonathan and the pooch are proud!</p>
-    <p class="a2 text hidden">You're a real rockstar - you deserve a cool hat like JTT's!</p>
-    <p class="d3 text hidden">Way to go - next stop: overalls and a peace sign necklace.</p>
-    <p class="g3 text hidden">Jonathan might look uncomfortable, but he's still proud of you! :)</p>
-    <p class="b3 text hidden">Congratulations on being in tune. Love, Jonathan Taylor Thomas</p>
-    <p class="e4 text hidden">Amazing. That guitar sounds as good as JTT looks.</p>
+    <div class="container">
+      <span class="tunedown">> TUNE UP</span>
+      <canvas id="canvas"></canvas>
+      <span class="tuneup">< TUNE DOWN</span>
+      <div class="textbox">
+        <p class="e2 text hidden">You did it. Jonathan and the pooch are proud!</p>
+        <p class="a2 text hidden">You're a real rockstar - you deserve a cool hat like JTT's!</p>
+        <p class="d3 text hidden">Way to go - next stop: overalls and a peace sign necklace.</p>
+        <p class="g3 text hidden">Jonathan might look uncomfortable, but he's still proud of you! :)</p>
+        <p class="b3 text hidden">Congratulations on being in tune. Love, Jonathan Taylor Thomas</p>
+        <p class="e4 text hidden">Amazing. That guitar sounds as good as JTT looks.</p>
+      </div>
+     </div>
     <script src="databend.js"></script>
     <script src="index.js"></script>
   </body>

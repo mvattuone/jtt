@@ -34,15 +34,16 @@ function init() {
   ]
 
   var canvas = document.createElement('canvas');
+  var renderCanvas = document.querySelector('#canvas');
   var context = canvas.getContext('2d');
-  canvas.width = 700;
-  canvas.height = 700;
+  renderCanvas.width = canvas.width = window.innerWidth / 2;
+  renderCanvas.height = canvas.height = window.innerHeight / 1.15;
 
   NOTES.forEach(function (note) { 
     var img = new Image();
     img.addEventListener('load', () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(img, 0, 0);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
       note.imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     });
     img.src = note.image;
@@ -116,23 +117,30 @@ function init() {
 
     console.log('looks like you are playing a ' + closestNote.name);
     var howOff = getNoteDeviationInCents(frequency, closestNote.frequency);
+    var tuneUp = document.querySelector('.tuneup');
+    var tuneDown = document.querySelector('.tunedown');
+    tuneUp.classList.add('hidden');
+    tuneDown.classList.add('hidden');
 
     console.log('and you are about ' + howOff + ' cents off');
-
+    
     if (Math.abs(howOff) < 5) {
      howOff = 0;
      document.querySelector('.' + closestNote.name).classList.remove('hidden');
     } else {
+      if ( howOff < 0 ) {
+        tuneUp.classList.remove('hidden');
+      } else {
+        tuneDown.classList.remove('hidden');
+      }
      howOff /= 10;
      document.querySelectorAll('.text').forEach(function (node) {
        node.classList.add('hidden');
      });
     };
 
-
-    databender.bend(closestNote.imageData, howOff).then(function(renderedBuffer) {
-      databender.draw(renderedBuffer);
-    });
+    databender.bend(closestNote.imageData, howOff)
+      .then((renderedBuffer) => databender.draw(renderedBuffer, renderCanvas));
   }
 
   var audioCtx = new AudioContext();
@@ -145,7 +153,7 @@ function init() {
   // Sometimes its not possible to play a guitar or use the microphone
   // while developing. This bypasses that limitation.
   if (CANT_BE_LOUD) {
-    fetch('3rd_String_G_64kb.mp3').then(function (response) {
+    fetch('6th_String_E_64kb.mp3').then(function (response) {
       return response.arrayBuffer();
     }).then(function (buffer) {
       audioCtx.decodeAudioData(buffer, (decodedBuffer) => {
