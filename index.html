@@ -5,6 +5,11 @@
       font-family: "Comic Neue";
       src: url("/ComicNeue-Regular.woff2") format("woff2");
     }
+
+    @font-face {
+      font-family: "Comic Neue Angular Bold Oblique";
+      src: url("/ComicNeue-Angular-Bold-Oblique.woff2") format("woff2");
+    }
     body { 
       background: #5E90FC;
     }
@@ -14,34 +19,55 @@
     }
 
     .textbox { 
+      background-color: #FBFA54;
+      grid-area: textbox;
       padding: 0;
     }
 
     .text {
-      font-family: "Comic Neue";
-      font-size: 48px;
+      color: #67AF4F;
+      font-family: "Comic Neue Angular Bold Oblique";
+      font-size: 60px;
       margin: 0;
+      text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
+      -webkit-text-stroke: 1px white;
     }
 
     .textbox {
-      grid-area: textbox;
     }
 
     .textbox .hidden {
       display: none;
     }
 
-    .tunedown, .tuneup {
-      font-size:108px;
+    .tuner-indicator {
+      align-self: center;
+      justify-self: center;
+    }
+
+    .tuner-indicator span {
+      background-color: #FBFA54;
+      border-radius:9999px;
+      color: #67AF4F;
+      display: flex;
+      align-items:center;
+      height: 190px;
+      width: 190px;
+      justify-content: center;
+      font-family: "Comic Neue Angular Bold Oblique";
+      font-size: 88px;
+      margin: 0;
+      text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
+      -webkit-text-stroke: 1px white;
       text-align: center;
     }
 
-    .tunedown {
-      grid-area: tunedown;
+    .tuner-indicator-sharp {
+      grid-area: tuner-indicator-sharp;
     }
 
-    .tuneup { 
-      grid-area: tuneup;
+    .tuner-indicator-flat { 
+      grid-area: tuner-indicator-flat;
     }
 
     .hidden {
@@ -50,11 +76,11 @@
 
     .container {
       display: grid;
-      grid-template-columns: 25% 50% 25%;
-      grid-template-rows: 80% 20%;
-      grid-template-areas: 
-        "tunedown canvas canvas tuneup"
-        "textbox textbox textbox textbox";
+        grid-template-columns: [tuner-indicator-flat] 25% [canvas] 50% [tuner-indicator-sharp] 25% [end];
+        grid-template-rows: 80%;
+        grid-template-areas: 
+        "tuner-indicator-flat canvas tuner-indicator-sharp"
+        "textbox  textbox textbox";
     }
 
   </style>
@@ -64,9 +90,13 @@
   </head>
   <body>
     <div class="container">
-      <span class="tunedown">> TUNE UP</span>
+      <div class="tuner-indicator tuner-indicator-flat">
+        <span>TUNE UP!</span>
+      </div>
       <canvas id="canvas"></canvas>
-      <span class="tuneup">< TUNE DOWN</span>
+      <div class="tuner-indicator tuner-indicator-sharp">
+        <span>TUNE DOWN!</span>
+      </div>
       <div class="textbox">
         <p class="e2 text hidden">You did it. Jonathan and the pooch are proud!</p>
         <p class="a2 text hidden">You're a real rockstar - you deserve a cool hat like JTT's!</p>

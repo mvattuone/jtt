@@ -117,8 +117,8 @@ function init() {
 
     console.log('looks like you are playing a ' + closestNote.name);
     var howOff = getNoteDeviationInCents(frequency, closestNote.frequency);
-    var tuneUp = document.querySelector('.tuneup');
-    var tuneDown = document.querySelector('.tunedown');
+    var tuneUp = document.querySelector('.tuner-indicator-flat');
+    var tuneDown = document.querySelector('.tuner-indicator-sharp');
     tuneUp.classList.add('hidden');
     tuneDown.classList.add('hidden');
 
