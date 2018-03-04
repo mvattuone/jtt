@@ -150,8 +150,7 @@ function init() {
   var waveform = new Float32Array(analyserNode.fftSize);
   var databender = new Databender(audioCtx);
 
-  // Sometimes its not possible to play a guitar or use the microphone
-  // while developing. This bypasses that limitation.
+  // Play an mp3 file for quiet testing purposes
   if (CANT_BE_LOUD) {
     fetch('6th_String_E_64kb.mp3').then(function (response) {
       return response.arrayBuffer();
