@@ -141,7 +141,6 @@ function main() {
 
   document.querySelectorAll('input[name="method"]').forEach(function (elem) { 
     elem.addEventListener('click', function (e)  {
-      console.log(e.target);
       if (e.target.classList.contains('mp3')) { 
         USE_MP3 = document.querySelector('input[type="radio"]:checked');
       } else {
