@@ -6,9 +6,18 @@
       
       this.channels = channels ? channels : 1;
 
-      this.bend = function (imageData, detuneValue) {
-        this.imageData = imageData;
-        var bufferSize = imageData.data.length / this.channels;
+      this.bend = function (image, detuneValue) {
+        if (image instanceof Image || image instanceof HTMLVideoElement) {
+          var canvas = document.createElement('canvas');
+          canvas.width = 1280;
+          canvas.height = 768;
+          var context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        }
+
+        this.imageData = imageData || image;
+        var bufferSize = this.imageData.data.length / this.channels;
 
         // Make an audioBuffer on the audioContext to pass to the offlineAudioCtx AudioBufferSourceNode
         var audioBuffer = this.audioCtx.createBuffer(this.channels, bufferSize, this.audioCtx.sampleRate); 
@@ -18,7 +27,7 @@
 
         // set the AudioBuffer buffer to the same as the imageData audioBuffer
         // v. convenient becuase you do not need to convert the data yourself
-        nowBuffering.set(imageData.data);
+        nowBuffering.set(this.imageData.data);
 
         return this.render(audioBuffer, detuneValue);
       }

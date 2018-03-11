@@ -4,50 +4,46 @@ function init() {
     {
       frequency: 82.4069,
       name: 'e2',
-      image: 'jtt-e2.jpg'
+      imageSrc: 'jtt-e2.jpg'
     },
     {
       frequency: 110, 
       name: 'a2',
-      image: 'jtt-a2.jpg'
+      imageSrc: 'jtt-a2.jpg'
     },
     {
       frequency: 146.832,
       name: 'd3',
-      image: 'jtt-d3.jpg'
+      imageSrc: 'jtt-d3.jpg'
     },
     {
       frequency: 195.998,
       name: 'g3',
-      image: 'jtt-g3.jpg'
+      imageSrc: 'jtt-g3.jpg'
     },
     {
       frequency: 246.942,
       name: 'b3',
-      image: 'jtt-b3.jpg'
+      imageSrc: 'jtt-b3.jpg'
     },
     {
       frequency: 329.628,
       name: 'e4',
-      image: 'jtt-e4.jpg'
+      imageSrc: 'jtt-e4.jpg'
     }
   ]
 
-  var canvas = document.createElement('canvas');
-  var renderCanvas = document.querySelector('#canvas');
-  var context = canvas.getContext('2d');
-  renderCanvas.width = canvas.width = window.innerWidth / 2;
-  renderCanvas.height = canvas.height = window.innerHeight / 1.15;
-
-  NOTES.forEach(function (note) { 
+  NOTES.forEach(function (note) {
     var img = new Image();
     img.addEventListener('load', () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-      note.imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      note.image = img;
     });
-    img.src = note.image;
-  })
+    img.src = note.imageSrc;
+  });
+
+  var renderCanvas = document.querySelector('#canvas');
+  renderCanvas.width = window.innerWidth / 2;
+  renderCanvas.height = window.innerHeight / 1.15;
 
   function getNoteDeviationInCents(frequency, targetFrequency) { 
     frequencyInterval = frequency/targetFrequency;
@@ -139,7 +135,7 @@ function init() {
      });
     };
 
-    databender.bend(closestNote.imageData, howOff)
+    databender.bend(closestNote.image, howOff)
       .then((renderedBuffer) => databender.draw(renderedBuffer, renderCanvas));
   }
 
