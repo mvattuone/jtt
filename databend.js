@@ -79,7 +79,7 @@
         // @see https://developer.mozilla.org/en-US/docs/Web/API/ImageData
         var transformedImage = new ImageData(clampedDataArray, this.imageData.width, this.imageData.height);
 
-       this.renderCanvas.getContext('2d').putImageData(transformedImage, 0, 0, 0, 0, this.renderCanvas.width, this.renderCanvas.height);
+       this.renderCanvas.getContext('2d').putImageData(transformedImage, 0, 0);
       };
 
 
