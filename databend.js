@@ -1,10 +1,11 @@
     // Create a Databender instance
-    var Databender = function (audioCtx, channels) {
+    var Databender = function (audioCtx, renderCanvas) {
 
       // Create an AudioContext or use existing one
       this.audioCtx = audioCtx ? audioCtx : new AudioContext();
+      this.renderCanvas = renderCanvas;
       
-      this.channels = channels ? channels : 1;
+      this.channels = 1; // @TODO - What would multiple channels look like?
 
       this.bend = function (image, detuneValue) {
         if (image instanceof Image || image instanceof HTMLVideoElement) {
@@ -15,8 +16,9 @@
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
           var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         }
-
+        
         this.imageData = imageData || image;
+        this.detuneValue = detuneValue || 0;
         var bufferSize = this.imageData.data.length / this.channels;
 
         // Make an audioBuffer on the audioContext to pass to the offlineAudioCtx AudioBufferSourceNode
@@ -29,10 +31,10 @@
         // v. convenient becuase you do not need to convert the data yourself
         nowBuffering.set(this.imageData.data);
 
-        return this.render(audioBuffer, detuneValue);
+        return Promise.resolve(audioBuffer); 
       }
 
-      this.render = function (buffer, detuneValue) {
+      this.render = function (buffer) {
         var _this = this;
         return new Promise(function (resolve, reject) {
 
@@ -45,7 +47,7 @@
 
           // Set buffer to audio buffer containing image data
           bufferSource.buffer = buffer; 
-          bufferSource.detune.value = detuneValue;
+          bufferSource.detune.value = _this.detuneValue;
 
           //  @NOTE: Calling this is when the AudioBufferSourceNode becomes unusable
           bufferSource.start();
@@ -61,7 +63,7 @@
         });
       };
 
-      this.draw = function (buffer, canvas) {
+      this.draw = function (buffer) {
 
         // Get buffer data
         var bufferData = buffer.getChannelData(0);
@@ -77,7 +79,7 @@
         // @see https://developer.mozilla.org/en-US/docs/Web/API/ImageData
         var transformedImage = new ImageData(clampedDataArray, this.imageData.width, this.imageData.height);
 
-       canvas.getContext('2d').putImageData(transformedImage, 0, 0, 0, 0, canvas.width, canvas.height);
+       this.renderCanvas.getContext('2d').putImageData(transformedImage, 0, 0, 0, 0, this.renderCanvas.width, this.renderCanvas.height);
       };
 
 

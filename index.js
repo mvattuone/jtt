@@ -111,15 +111,12 @@ function main() {
       return (Math.abs(current.frequency - frequency) < Math.abs(prev.frequency - frequency)) ? current : prev
     });
 
-    console.log('looks like you are playing a ' + closestNote.name);
     var howOff = getNoteDeviationInCents(frequency, closestNote.frequency);
     var tuneUp = document.querySelector('.tuner-indicator-flat');
     var tuneDown = document.querySelector('.tuner-indicator-sharp');
     tuneUp.classList.add('hidden');
     tuneDown.classList.add('hidden');
 
-    console.log('and you are about ' + howOff + ' cents off');
-    
     if (Math.abs(howOff) < 5) {
      howOff = 0;
      document.querySelector('.' + closestNote.name).classList.remove('hidden');
@@ -136,7 +133,8 @@ function main() {
     };
 
     databender.bend(closestNote.image, howOff)
-      .then((renderedBuffer) => databender.draw(renderedBuffer, renderCanvas));
+      .then(databender.render.bind(databender))
+      .then(databender.draw.bind(databender));
   }
 
   document.querySelectorAll('input[name="method"]').forEach(function (elem) { 
@@ -161,7 +159,7 @@ function main() {
     analyserNode = audioCtx.createAnalyser();
     analyserNode.fftSize = 2048;
     waveform = new Float32Array(analyserNode.fftSize);
-    databender = new Databender(audioCtx);
+    databender = new Databender(audioCtx, renderCanvas);
     // Play an mp3 file for quiet testing purposes
     if (USE_MP3) {
       fetch('6th_String_E_64kb.mp3').then(function (response) {
