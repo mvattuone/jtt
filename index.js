@@ -1,5 +1,5 @@
 
-function init() { 
+function main() { 
   const NOTES = [
     {
       frequency: 82.4069,
@@ -139,41 +139,61 @@ function init() {
       .then((renderedBuffer) => databender.draw(renderedBuffer, renderCanvas));
   }
 
-  var audioCtx = new AudioContext();
-  source = audioCtx.createBufferSource();
-  var analyserNode = audioCtx.createAnalyser();
-  analyserNode.fftSize = 2048;
-  var waveform = new Float32Array(analyserNode.fftSize);
-  var databender = new Databender(audioCtx);
-
-  // Play an mp3 file for quiet testing purposes
-  if (CANT_BE_LOUD) {
-    fetch('6th_String_E_64kb.mp3').then(function (response) {
-      return response.arrayBuffer();
-    }).then(function (buffer) {
-      audioCtx.decodeAudioData(buffer, (decodedBuffer) => {
-        source.buffer = decodedBuffer;
-        source.connect(analyserNode);
-        source.loop = true;
-        source.start(0);
-        analyserNode.connect(audioCtx.destination);
-        update(source);
-      });
+  document.querySelectorAll('input[name="method"]').forEach(function (elem) { 
+    elem.addEventListener('click', function (e)  {
+      console.log(e.target);
+      if (e.target.classList.contains('mp3')) { 
+        USE_MP3 = document.querySelector('input[type="radio"]:checked');
+      } else {
+        USE_MP3 = false;
+      }
+      switchMethod();
     });
-  } else {
-    window.navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(function (stream) { 
-        var microphone = audioCtx.createMediaStreamSource(stream);
-        microphone.connect(analyserNode);
-        analyserNode.connect(audioCtx.destination);
-        update(microphone);
-      })
-      .catch(function (error) {
-        console.log(error);
-        throw new Error(error.name);
+  });
+
+  var audioCtx = new AudioContext();
+
+  function switchMethod() {
+    if (audioCtx) {
+      audioCtx.close();
+      audioCtx = new AudioContext();
+    }
+    source = audioCtx.createBufferSource();
+    analyserNode = audioCtx.createAnalyser();
+    analyserNode.fftSize = 2048;
+    waveform = new Float32Array(analyserNode.fftSize);
+    databender = new Databender(audioCtx);
+    // Play an mp3 file for quiet testing purposes
+    if (USE_MP3) {
+      fetch('6th_String_E_64kb.mp3').then(function (response) {
+        return response.arrayBuffer();
+      }).then(function (buffer) {
+        audioCtx.decodeAudioData(buffer, (decodedBuffer) => {
+          source.buffer = decodedBuffer;
+          source.connect(analyserNode);
+          source.loop = true;
+          source.start(0);
+          analyserNode.connect(audioCtx.destination);
+          update(source);
+        });
       });
+    } else {
+      window.navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function (stream) { 
+          var microphone = audioCtx.createMediaStreamSource(stream);
+          microphone.connect(analyserNode);
+          analyserNode.connect(audioCtx.destination);
+          update(microphone);
+        })
+        .catch(function (error) {
+          console.log(error);
+          throw new Error(error.name);
+        });
+    }
   }
+
+   switchMethod();
 }
 
-CANT_BE_LOUD = true;
-init();
+USE_MP3 = true;
+main();
