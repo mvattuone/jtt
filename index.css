@@ -5,12 +5,12 @@
 
     @font-face {
       font-family: "Comic Neue";
-      src: url("/ComicNeue-Regular.woff2") format("woff2");
+      src: url("/fonts/ComicNeue-Regular.woff2") format("woff2");
     }
 
     @font-face {
       font-family: "Comic Neue Angular Bold Oblique";
-      src: url("/ComicNeue-Angular-Bold-Oblique.woff2") format("woff2");
+      src: url("/fonts/ComicNeue-Angular-Bold-Oblique.woff2") format("woff2");
     }
     body { 
       background: #5E90FC;

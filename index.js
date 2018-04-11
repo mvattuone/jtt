@@ -2,32 +2,32 @@ const NOTES = [
   {
     frequency: 82.4069,
     name: 'e2',
-    imageSrc: 'jtt-e2.jpg'
+    imageSrc: 'images/jtt-e2.jpg'
   },
   {
     frequency: 110, 
     name: 'a2',
-    imageSrc: 'jtt-a2.jpg'
+    imageSrc: 'images/jtt-a2.jpg'
   },
   {
     frequency: 146.832,
     name: 'd3',
-    imageSrc: 'jtt-d3.jpg'
+    imageSrc: 'images/jtt-d3.jpg'
   },
   {
     frequency: 195.998,
     name: 'g3',
-    imageSrc: 'jtt-g3.jpg'
+    imageSrc: 'images/jtt-g3.jpg'
   },
   {
     frequency: 246.942,
     name: 'b3',
-    imageSrc: 'jtt-b3.jpg'
+    imageSrc: 'images/jtt-b3.jpg'
   },
   {
     frequency: 329.628,
     name: 'e4',
-    imageSrc: 'jtt-e4.jpg'
+    imageSrc: 'images/jtt-e4.jpg'
   }
 ]
 
@@ -149,7 +149,7 @@ function connectToMediaStreamSource(stream) {
 function switchMethod() {
   // Play an mp3 file for quiet testing purposes
   if (USE_MP3) {
-    fetch('6th_String_E_64kb.mp3')
+    fetch('audio/6th_String_E_64kb.mp3')
       .then(response => response.arrayBuffer())
       .then(buffer => audioCtx.decodeAudioData(buffer))
       .then(decodedBuffer => connectToSource(decodedBuffer)) 
