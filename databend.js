@@ -35,32 +35,22 @@
       }
 
       this.render = function (buffer) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
+        // Create offlineAudioCtx that will house our rendered buffer
+        var offlineAudioCtx = new OfflineAudioContext(this.channels, buffer.length, this.audioCtx.sampleRate);
 
-          // Create offlineAudioCtx that will house our rendered buffer
-          var offlineAudioCtx = new OfflineAudioContext(_this.channels, buffer.length, _this.audioCtx.sampleRate);
+        // Create an AudioBufferSourceNode, which represents an audio source consisting of in-memory audio data
+        var bufferSource = offlineAudioCtx.createBufferSource();
 
-          console.log(buffer.getChannelData(0));
-          // Create an AudioBufferSourceNode, which represents an audio source consisting of in-memory audio data
-          var bufferSource = offlineAudioCtx.createBufferSource();
+        // Set buffer to audio buffer containing image data
+        bufferSource.buffer = buffer; 
+        bufferSource.detune.value = this.detuneValue;
 
-          // Set buffer to audio buffer containing image data
-          bufferSource.buffer = buffer; 
-          bufferSource.detune.value = _this.detuneValue;
+        //  @NOTE: Calling this is when the AudioBufferSourceNode becomes unusable
+        bufferSource.start();
 
-          //  @NOTE: Calling this is when the AudioBufferSourceNode becomes unusable
-          bufferSource.start();
+        bufferSource.connect(offlineAudioCtx.destination);
 
-          bufferSource.connect(offlineAudioCtx.destination);
-
-          // Kick off the render, callback will contain rendered buffer in event
-          offlineAudioCtx.startRendering();
-          // Render the databent image.
-          offlineAudioCtx.oncomplete = function (e) {
-            resolve(e.renderedBuffer);
-          };
-        });
+        return offlineAudioCtx.startRendering();
       };
 
       this.draw = function (buffer) {
