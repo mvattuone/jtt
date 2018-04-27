@@ -10,8 +10,8 @@
       this.bend = function (image, detuneValue) {
         if (image instanceof Image || image instanceof HTMLVideoElement) {
           var canvas = document.createElement('canvas');
-          canvas.width = 1280;
-          canvas.height = 768;
+          canvas.width = 300;
+          canvas.height = 150;
           var context = canvas.getContext('2d');
           context.drawImage(image, 0, 0, canvas.width, canvas.height);
           var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
