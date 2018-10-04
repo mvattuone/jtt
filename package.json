@@ -1,0 +1,31 @@
+{
+  "name": "jtt",
+  "version": "1.0.0",
+  "description": "bend jtt to tune your guitar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvattuone/webaudio-databend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mvattuone/webaudio-databend/issues"
+  },
+  "homepage": "https://github.com/mvattuone/webaudio-databend#readme",
+  "dependencies": {
+    "dat.gui": "^0.7.1",
+    "tunajs": "^1.0.1"
+  },
+  "devDependencies": {
+    "rollup": "^0.58.2",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  }
+}

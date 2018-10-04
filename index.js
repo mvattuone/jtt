@@ -1,3 +1,5 @@
+const Databender = require('./databend.js');
+
 const NOTES = [
   {
     frequency: 82.4069,
@@ -40,7 +42,7 @@ function createImageFromConfig(note) {
 }
 
 function getNoteDeviationInCents(frequency, targetFrequency) { 
-  frequencyInterval = frequency/targetFrequency;
+  const frequencyInterval = frequency/targetFrequency;
   return 1200 * Math.log2(frequencyInterval);
 }
 
@@ -50,7 +52,7 @@ function getFrequency() {
   var bestLags = [];
 
   var rms = 0;
-  for (i = 0; i < waveform.length; i++) { 
+  for (let i = 0; i < waveform.length; i++) { 
     rms += waveform[i] * waveform[i]; 
   }
 
@@ -60,10 +62,10 @@ function getFrequency() {
     return false;
   }
 
-  for (lag = -waveform.length; lag <= 0; lag++ ) {
+  for (let lag = -waveform.length; lag <= 0; lag++ ) {
     var xcorr = 0;
 
-    for (i = 0; i < waveform.length; i++) {
+    for (let i = 0; i < waveform.length; i++) {
       xcorr += waveform[i] * (waveform[i - lag] || 0);
     }
 
@@ -75,7 +77,7 @@ function getFrequency() {
 
   var main_peak = correlogram[correlogram.length - 1];
   var peaks = [];
-  for (i = 0; i < waveform.length; i++) {
+  for (let i = 0; i < waveform.length; i++) {
     if (correlogram[i+1] && correlogram[i].value > correlogram[i+1].value && correlogram[i-1] && correlogram[i].value > correlogram[i-1].value) {
       peaks.push(correlogram[i]);
     }
@@ -124,13 +126,13 @@ function update(stream) {
     });
   };
 
-  databender.bend(closestNote.image, howOff)
-    .then(databender.render.bind(databender))
-    .then(databender.draw.bind(databender));
+  databender.updateConfig('detune', 'value', howOff);
+
+  databender.bend(closestNote.image, context, 0, 0, renderCanvas.width, renderCanvas.height);
 }
 
 function connectToSource(decodedBuffer) {
-  source = audioCtx.createBufferSource();
+  const source = audioCtx.createBufferSource();
   source.buffer = decodedBuffer;
   source.connect(analyserNode);
   source.loop = true;
@@ -140,6 +142,7 @@ function connectToSource(decodedBuffer) {
 };
 
 function connectToMediaStreamSource(stream) { 
+  console.log(stream);
   var microphone = audioCtx.createMediaStreamSource(stream);
   microphone.connect(analyserNode);
   analyserNode.connect(audioCtx.destination);
@@ -149,6 +152,9 @@ function connectToMediaStreamSource(stream) {
 function switchMethod() {
   // Play an mp3 file for quiet testing purposes
   if (USE_MP3) {
+    if (foo) { 
+      foo.getAudioTracks()[0].enabled = false;
+    }
     fetch('audio/6th_String_E_64kb.mp3')
       .then(response => response.arrayBuffer())
       .then(buffer => audioCtx.decodeAudioData(buffer))
@@ -156,19 +162,45 @@ function switchMethod() {
       .catch(err => console.error(err)); 
   } else {
     window.navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => { 
+        foo = stream;
+        return stream;
+       })
       .then(connectToMediaStreamSource)
       .catch(err => console.error(err));
   }
 }
 
+let config = {
+  detune: {
+    active: true,
+    areaOfEffect: 1,
+    enableEnvelopes: false,
+    enablePartial: false,
+    randomize: false,
+    randomValues: 2,
+    value: 0
+  }
+}
+
+let renderCanvas;
+let context;
+let audioCtx;
+let analyserNode;
+let waveform;
+let databender;
+let tuneUp;
+let tuneDown;
+
 function main() { 
   renderCanvas = document.querySelector('#canvas');
+  context = renderCanvas.getContext('2d');
   audioCtx = new AudioContext();
   analyserNode = audioCtx.createAnalyser();
   analyserNode.fftSize = 2048;
   NOTES.forEach(createImageFromConfig);
   waveform = new Float32Array(analyserNode.fftSize);
-  databender = new Databender(audioCtx, renderCanvas);
+  databender = new Databender(config, audioCtx);
   tuneUp = document.querySelector('.tuner-indicator-flat');
   tuneDown = document.querySelector('.tuner-indicator-sharp');
 
@@ -187,5 +219,7 @@ function main() {
   switchMethod();
 }
 
-USE_MP3 = true;
+let foo;
+const USE_MP3 = true;
+
 main();
