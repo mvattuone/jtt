@@ -128,7 +128,7 @@ function update(stream) {
 
   databender.updateConfig('detune', 'value', howOff);
 
-  databender.bend(closestNote.image, context, 0, 0, renderCanvas.width, renderCanvas.height);
+  databender.bend(closestNote.image, context, 0, 0, 0, 0, renderCanvas.width, renderCanvas.height);
 }
 
 function connectToSource(decodedBuffer) {
