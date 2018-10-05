@@ -2421,7 +2421,7 @@ var jtt = (function () {
   });
 
   // Create a Databender instance
-  var databend = function (config, audioCtx) {
+  var databender = function (config, audioCtx) {
     this.audioCtx = audioCtx ? audioCtx : new AudioContext();
     this.channels = 1; 
     this.config = config;
@@ -2663,9 +2663,9 @@ var jtt = (function () {
         node.classList.add('hidden');
       });
     }
-    databender.updateConfig('detune', 'value', howOff);
+    databender$1.updateConfig('detune', 'value', howOff);
 
-    databender.bend(closestNote.image, context, 0, 0, 0, 0, renderCanvas.width, renderCanvas.height);
+    databender$1.bend(closestNote.image, context, 0, 0, 0, 0, renderCanvas.width, renderCanvas.height);
   }
 
   function connectToSource(decodedBuffer) {
@@ -2723,7 +2723,7 @@ var jtt = (function () {
   let audioCtx;
   let analyserNode;
   let waveform;
-  let databender;
+  let databender$1;
   let tuneUp;
   let tuneDown;
 
@@ -2735,7 +2735,7 @@ var jtt = (function () {
     analyserNode.fftSize = 2048;
     NOTES.forEach(createImageFromConfig);
     waveform = new Float32Array(analyserNode.fftSize);
-    databender = new databend(config, audioCtx);
+    databender$1 = new databender(config, audioCtx);
     tuneUp = document.querySelector('.tuner-indicator-flat');
     tuneDown = document.querySelector('.tuner-indicator-sharp');
 

@@ -1,4 +1,4 @@
-const Databender = require('./databend.js');
+const Databender = require('databender');
 
 const NOTES = [
   {
