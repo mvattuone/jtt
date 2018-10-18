@@ -132,7 +132,7 @@ function update(stream) {
 }
 
 function connectToSource(decodedBuffer) {
-  const source = audioCtx.createBufferSource();
+  source = audioCtx.createBufferSource();
   source.buffer = decodedBuffer;
   source.connect(analyserNode);
   source.loop = true;
@@ -152,8 +152,8 @@ function connectToMediaStreamSource(stream) {
 function switchMethod() {
   // Play an mp3 file for quiet testing purposes
   if (USE_MP3) {
-    if (foo) { 
-      foo.getAudioTracks()[0].enabled = false;
+    if (stream) { 
+      stream.getAudioTracks()[0].enabled = false;
     }
     fetch('audio/6th_String_E_64kb.mp3')
       .then(response => response.arrayBuffer())
@@ -161,9 +161,12 @@ function switchMethod() {
       .then(decodedBuffer => connectToSource(decodedBuffer)) 
       .catch(err => console.error(err)); 
   } else {
+    if (source) {
+      source.stop();
+    }
     window.navigator.mediaDevices.getUserMedia({ audio: true })
-      .then((stream) => { 
-        foo = stream;
+      .then((s) => { 
+        stream = s;
         return stream;
        })
       .then(connectToMediaStreamSource)
@@ -191,6 +194,8 @@ let waveform;
 let databender;
 let tuneUp;
 let tuneDown;
+let source;
+let stream;
 
 function main() { 
   renderCanvas = document.querySelector('#canvas');
@@ -219,7 +224,6 @@ function main() {
   switchMethod();
 }
 
-let foo;
-const USE_MP3 = true;
+let USE_MP3 = true;
 
 main();
