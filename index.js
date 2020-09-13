@@ -209,6 +209,7 @@ function main() {
   tuneUp = document.querySelector('.tuner-indicator-flat');
   tuneDown = document.querySelector('.tuner-indicator-sharp');
 
+
   document.querySelectorAll('input[name="method"]').forEach(function (elem) { 
     elem.addEventListener('click', function (e)  {
       if (e.target.classList.contains('mp3')) { 
@@ -226,4 +227,9 @@ function main() {
 
 let USE_MP3 = true;
 
-main();
+document.querySelector('.overlay').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.remove();
+  main();
+});

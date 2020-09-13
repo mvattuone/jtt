@@ -1,90 +1,120 @@
-    html,
-    body,
-    .container {
-      height: 100%;
-    }
+html,
+body,
+.container {
+  height: 100%;
+}
 
-    @font-face {
-      font-family: "Comic Neue";
-      src: url("/fonts/ComicNeue-Regular.woff2") format("woff2");
-    }
+@font-face {
+  font-family: "Comic Neue";
+  src: url("/fonts/ComicNeue-Regular.woff2") format("woff2");
+}
 
-    @font-face {
-      font-family: "Comic Neue Angular Bold Oblique";
-      src: url("/fonts/ComicNeue-Angular-Bold-Oblique.woff2") format("woff2");
-    }
-    body { 
-      background: #5E90FC;
-    }
+@font-face {
+  font-family: "Comic Neue Angular Bold Oblique";
+  src: url("/fonts/ComicNeue-Angular-Bold-Oblique.woff2") format("woff2");
+}
 
-    #canvas {
-      height: 100%;
-      grid-area: canvas;
-      width: 100%;
-    }
+body {
+  background: #5e90fc;
+  position: relative;
+  margin: 0;
+}
 
-    .textbox { 
-      background-color: #FBFA54;
-      grid-area: textbox;
-      padding: 0;
-    }
+#canvas {
+  height: 100%;
+  grid-area: canvas;
+  width: 100%;
+}
 
-    .text {
-      color: #67AF4F;
-      font-family: "Comic Neue Angular Bold Oblique";
-      font-size: 60px;
-      margin: 0;
-      text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
-      -webkit-text-stroke: 1px white;
-    }
+.textbox {
+  background-color: #fbfa54;
+  grid-area: textbox;
+  padding: 0;
+}
 
-    .textbox {
-    }
+.text {
+  color: #67af4f;
+  font-family: "Comic Neue Angular Bold Oblique";
+  font-size: 60px;
+  margin: 0;
+  text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
+  -webkit-text-stroke: 1px white;
+}
 
-    .textbox .hidden {
-      display: none;
-    }
+.textbox {
+}
 
-    .tuner-indicator {
-      align-self: center;
-      justify-self: center;
-    }
+.textbox .hidden {
+  display: none;
+}
 
-    .tuner-indicator span {
-      background-color: #FBFA54;
-      border-radius:9999px;
-      color: #67AF4F;
-      display: flex;
-      align-items:center;
-      height: 190px;
-      width: 190px;
-      justify-content: center;
-      font-family: "Comic Neue Angular Bold Oblique";
-      font-size: 88px;
-      margin: 0;
-      text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
-      -webkit-text-stroke: 1px white;
-      text-align: center;
-    }
+.tuner-indicator {
+  align-self: center;
+  justify-self: center;
+}
 
-    .tuner-indicator-sharp {
-      grid-area: tuner-indicator-sharp;
-    }
+.tuner-indicator span {
+  background-color: #fbfa54;
+  border-radius: 9999px;
+  color: #67af4f;
+  display: flex;
+  align-items: center;
+  height: 190px;
+  width: 190px;
+  justify-content: center;
+  font-family: "Comic Neue Angular Bold Oblique";
+  font-size: 88px;
+  margin: 0;
+  text-shadow: 3px 3px #bc2586, 3px 3px #bc2586, 3px 0 #bc2586, 0 -1px #bc2586;
+  -webkit-text-stroke: 1px white;
+  text-align: center;
+}
 
-    .tuner-indicator-flat { 
-      grid-area: tuner-indicator-flat;
-    }
+.tuner-indicator-sharp {
+  grid-area: tuner-indicator-sharp;
+}
 
-    .hidden {
-      visibility: hidden;
-    }
+.tuner-indicator-flat {
+  grid-area: tuner-indicator-flat;
+}
 
-    .container {
-      display: grid;
-        grid-template-columns: [tuner-indicator-flat] 25% [canvas] 50% [tuner-indicator-sharp] 25% [end];
-        grid-template-rows: 80%;
-        grid-template-areas: 
-        "tuner-indicator-flat canvas tuner-indicator-sharp"
-        "textbox  textbox textbox";
-    }
+.hidden {
+  visibility: hidden;
+}
 
+.container {
+  display: grid;
+  grid-template-columns: [tuner-indicator-flat] 25% [canvas] 50% [tuner-indicator-sharp] 25% [end];
+  grid-template-rows: 80%;
+  grid-template-areas:
+    "tuner-indicator-flat canvas tuner-indicator-sharp"
+    "textbox  textbox textbox";
+}
+
+.overlay {
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: "Comic Neue Angular Bold Oblique";
+  z-index: 3;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay:after {
+  background-color: #222;
+  content: "";
+  color: #fff;
+  opacity: 0.4;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  top: 0;
+}
